@@ -9,7 +9,7 @@ use Zend\Module\Manager,
 class Module implements AutoloaderProvider
 {
     protected $view;
-    protected $viewListener;
+    protected $config;
 
     public function init(Manager $moduleManager)
     {
@@ -33,7 +33,10 @@ class Module implements AutoloaderProvider
 
     public function getConfig($env = null)
     {
-        return include __DIR__ . '/configs/module.config.php';        
+        if (!$this->config) {
+            $this->config = include __DIR__ . '/configs/module.config.php';
+        }
+        return $this->config;
     }
 
     public function initializeView($e)
@@ -46,30 +49,18 @@ class Module implements AutoloaderProvider
         }
         $plugins = isset($config['plugins']) ? $config['plugins'] : array();
         if (isset($config['theme'])) {
-            // Merge plugin config with base theme config
-            $plugins = array_merge_recursive(
-                $config['layouts'][$config['theme']]['plugins'],
-                $plugins
-            );
+            if (isset($config['layouts'][$config['theme']]['plugins'])){
+                // Merge plugin config with base theme config
+                $themePlugins = $config['layouts'][$config['theme']]['plugins'];
+                $plugins = $themePlugins->merge($plugins);
+            }
+            $view->resolver()->addPath(__DIR__ . '/views/'.$config['theme']);
         }
-        $loadScript = '';
-        foreach ($plugins as $plugin => $pluginOptions) {
+        foreach ($plugins as $plugin) {
             $view->plugin('headScript')->appendFile($config['pluginPaths'][$plugin]);
-            $plugin = $this->loadPlugin($plugin, $pluginOptions);
-            $loadScript .= $plugin . "\n";
         }
-        if (strlen($loadScript) > 1) {
-            $view->plugin('headScript')->prependFile($config['jqueryPath']);
-            $view->plugin('headScript')->appendScript(printf('$(function(){%s})', $loadScript));
-        }
-
+        $view->plugin('headScript')->prependFile($config['jqueryPath']);
         $view->plugin('headLink')->appendStylesheet($cssPath);
-    }
-
-    public function loadPlugin($plugin, $pluginOptions)
-    {
-        $pluginName = 'TwitterBootstrap\\Plugin\\' . ucfirst($plugin);
-        return new $pluginName($pluginOptions);
     }
     
     protected function getView($app)

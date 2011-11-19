@@ -25,8 +25,15 @@
         <div class="container">
           <a class="brand" href="#">Project name</a>
           <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
+            <li class="active"><a href="#" >Home</a></li>
+            <li class="dropdown" data-dropdown="dropdown"><a href="#about" class="dropdown-toggle">About</a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Secondary link</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Another link</a></li>
+                </ul>
+            </li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </div>
@@ -41,7 +48,11 @@
         <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
         <p><a class="btn primary large">Learn more &raquo;</a></p>
       </div>
-
+      <div class="row">
+          <div class="span16">
+              <?php echo $this->raw('content') ?>
+          </div>
+      </div>
       <!-- Example row of columns -->
       <div class="row">
         <div class="span6">

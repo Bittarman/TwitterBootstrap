@@ -1,8 +1,8 @@
 <?php return new Zend\Config\Config(
     array(
+        'theme'   => 'container',
+        'layout'  => 'layouts/container.phtml',
         'plugins' => array(
-            'modal'   => array(),
-            'buttons' => array(),
         ),
         'cssPath'     => 'http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css',    
         'pluginPaths' => array(
@@ -19,12 +19,7 @@
         'layouts' => array(
             'hero' => array(
                 'plugins'  => array(
-                    'buttons' => array(
-                        'elements' => '.btn'
-                    ),
-                    'dropdown' => array(
-                        'elements' => '#nav'
-                    )
+                    'buttons', 'dropdown',
                 ),
             ),
             'container' => array(
@@ -37,7 +32,6 @@
 
                 ),
             ),
-        )
-
+        ),
     )
 );
