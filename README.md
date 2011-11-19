@@ -42,3 +42,4 @@ Examples of the layouts:
 * Fluid: http://twitter.github.com/bootstrap/examples/fluid.html
 * Container: http://twitter.github.com/bootstrap/examples/container-app.html
                    
+The Container layout is enabled by default.
