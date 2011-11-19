@@ -37,6 +37,7 @@ Enables the Container layout, and;
     </pre>
 Enables the Fluid layout.
 Examples of the layouts:
+
 * Hero: http://twitter.github.com/bootstrap/examples/hero.html
 * Fluid: http://twitter.github.com/bootstrap/examples/fluid.html
 * Container: http://twitter.github.com/bootstrap/examples/container-app.html
