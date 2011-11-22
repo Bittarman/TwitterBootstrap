@@ -46,7 +46,7 @@ class Module implements AutoloaderProvider
         $config = $e->getParam('config');
         $config = $config['twitterbootstrap'];
         if (isset($config['css_path'])) {
-            $view->headLink()->appendStylesheet($config['css_path']);
+            $view->plugin('headLink')->appendStylesheet($config['css_path']);
         }
         $plugins = isset($config['plugins']) ? $config['plugins'] : array();
         if (is_object($plugins)) {
@@ -63,11 +63,13 @@ class Module implements AutoloaderProvider
             }
             //$view->resolver()->addPath(__DIR__ . '/views/'.$config['theme']);
         }
+        $headScript = $view->plugin('headScript');
         foreach ($plugins as $plugin) {
-            $view->headScript()->appendFile($config['plugin_paths'][$plugin]);
+            $headScript->appendFile($config['plugin_paths'][$plugin]);
         }
         // @TODO: Not this
-        $view->headScript()->prependFile($config['jquery_path']);
+        // Waiting for concord on how we do js deps.
+        $view->plugin('headScript')->prependFile($config['jquery_path']);
     }
     
     protected function getView($app)
