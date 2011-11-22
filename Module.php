@@ -43,24 +43,31 @@ class Module implements AutoloaderProvider
     {
         $app    = $e->getParam('application');
         $view   = $this->getView($app);
-        $config = $this->getConfig();
-        if (isset($config['cssPath'])) {
-            $cssPath = $config['cssPath']; 
+        $config = $e->getParam('config');
+        $config = $config['twitterbootstrap'];
+        if (isset($config['css_path'])) {
+            $view->headLink()->appendStylesheet($config['css_path']);
         }
         $plugins = isset($config['plugins']) ? $config['plugins'] : array();
+        if (is_object($plugins)) {
+            $plugins = $plugins->toArray();
+        }
         if (isset($config['theme'])) {
-            if (isset($config['layouts'][$config['theme']]['plugins'])){
+            if (isset($config['themes'][$config['theme']]['plugins'])){
                 // Merge plugin config with base theme config
-                $themePlugins = $config['layouts'][$config['theme']]['plugins'];
-                $plugins = $themePlugins->merge($plugins);
+                $themePlugins = $config['themes'][$config['theme']]['plugins'];
+                if (is_object($themePlugins)) {
+                    $themePlugins = $themePlugins->toArray();
+                }
+                $plugins = array_replace_recursive($plugins, $themePlugins);
             }
-            $view->resolver()->addPath(__DIR__ . '/views/'.$config['theme']);
+            //$view->resolver()->addPath(__DIR__ . '/views/'.$config['theme']);
         }
         foreach ($plugins as $plugin) {
-            $view->plugin('headScript')->appendFile($config['pluginPaths'][$plugin]);
+            $view->headScript()->appendFile($config['plugin_paths'][$plugin]);
         }
-        $view->plugin('headScript')->prependFile($config['jqueryPath']);
-        $view->plugin('headLink')->appendStylesheet($cssPath);
+        // @TODO: Not this
+        $view->headScript()->prependFile($config['jquery_path']);
     }
     
     protected function getView($app)
